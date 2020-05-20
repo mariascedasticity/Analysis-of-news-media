@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
 
 #############
 # Libraries #
@@ -24,7 +19,6 @@ warnings.filterwarnings('ignore')
 # ### Single image query to Microsoft Azure
 # #### (https://azure.microsoft.com/en-us/services/cognitive-services/face/)
 
-# In[3]:
 
 
 # Requesting headers set Subscription key which provides access to this API. Found in your Cognitive Services accounts.
@@ -53,9 +47,6 @@ except Exception as e:
     print(e)
 
 
-# In[175]:
-
-
 # Extracting attributes gender and age
 faces = request.json()
 jque = f'.[] | {{FaceID: .faceId, gender: .faceAttributes .gender, age:  .faceAttributes .age}}'
@@ -67,15 +58,10 @@ d = pd.DataFrame(f)
 
 # ### Loop for all image URLs in dataframe
 
-# In[1]:
-
 
 # Reading your data with URLs
 df = pd.read_csv('your_data.csv') 
 df.index.name = 'ID'
-
-
-# In[4]:
 
 
 # Creating a temporary dataframe
@@ -111,14 +97,10 @@ for i in tdqm(range(0,len(df))):
     df = df.reset_index()
 
 
-# In[5]:
-
 
 result = pd.merge(df, l, how='left', on='ID')
 result.head() 
 
-
-# In[6]:
 
 
 result.to_csv('your_data_file.csv', index=False)

@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
 
 #############
 # Libraries #
@@ -42,8 +37,6 @@ warnings.filterwarnings('ignore')
 
 # ### Text preprocessing
 
-# In[ ]:
-
 
 def standardize_text(df, text_field):
     df[text_field] = df[text_field].str.replace(r"http\S+", "")
@@ -57,16 +50,12 @@ def standardize_text(df, text_field):
 df = standardize_text(df, "full_text")
 
 
-# In[ ]:
-
 
 #Tokenizing sentences to a list of separate words
 tokenizer = RegexpTokenizer(r'\w+')
 
 df["tokens"] = df["full_text"].apply(tokenizer.tokenize)
 
-
-# In[ ]:
 
 
 nltk.download("stopwords")
@@ -78,16 +67,12 @@ def remove_stopwords(text):
 df['tokens'] = df['tokens'].apply(lambda x: remove_stopwords(x))
 
 
-# In[ ]:
-
 
 words = [word for tokens in df["tokens"] for word in tokens]
 vocabulary = sorted(list(set(words)))
 
 print("%s words total, with a vocabulary size of %s" % (len(words), len(vocabulary)))
 
-
-# In[ ]:
 
 
 # Lemmatization
@@ -106,13 +91,8 @@ df = df.drop(['tokens'], axis=1)
 df = df.rename(columns={"lemm": "tokens"})
 
 
-# In[ ]:
-
 
 df.to_csv('data.csv', index=True)
-
-
-# In[2]:
 
 
 def build_df(path):
@@ -142,29 +122,16 @@ def load_obj(file_name):
         file = pickle.load(file)
     return file
 
-
-# In[3]:
-
-
 df_target, df_notarget = build_df("result.csv")
-
-
-# In[4]:
 
 
 df_model = df_target[["tokens", "gen_label"]]
 df_model.loc[df_model["gen_label"] == 2, "gen_label"]  = 0
 
 
-# In[5]:
-
 
 df_corpus = df_model["tokens"]
 df_labels = df_model["gen_label"]
-
-
-# In[8]:
-
 
 count_vectorizer = CountVectorizer(
     max_features=10000, 
@@ -174,20 +141,11 @@ count_vectorizer = CountVectorizer(
 )
 
 
-# In[9]:
-
-
 X_train, X_test, y_train, y_test = train_test_split(df_corpus, df_labels, test_size=0.2, random_state=42)
-
-
-# In[10]:
 
 
 X_train_words = count_vectorizer.fit_transform(X_train)
 X_test_words = count_vectorizer.transform(X_test)
-
-
-# In[11]:
 
 
 logit = LogisticRegression(C=1, penalty='l1', 
@@ -195,19 +153,11 @@ logit = LogisticRegression(C=1, penalty='l1',
                            random_state=42, class_weight="balanced")
 
 
-# In[12]:
-
 
 cross_val_score(logit, X_train_words, y_train, scoring="roc_auc", cv=5).mean()
 
 
-# In[13]:
-
-
 plot_roc_curve(y_test, logit.fit(X_train_words, y_train).predict_proba(X_test_words)[:, 1])
-
-
-# In[14]:
 
 
 # Top 200 words by magnitude of the coefficient
@@ -217,25 +167,11 @@ most_important_w = logit.coef_[0][most_important_idx]
 most_important_word = np.array(count_vectorizer.get_feature_names())[most_important_idx]
 
 
-# In[15]:
-
-
 dict(zip(most_important_word, most_important_w))
 
 
-# In[16]:
-
-
 X_train_words = X_train_words.toarray()
-
-
-# In[17]:
-
-
 pred_w = logit.predict_proba(X_train_words)[:, 1]
-
-
-# In[26]:
 
 
 # Calculating marginal effects of words
@@ -257,10 +193,6 @@ for word_idx in tqdm(most_important_idx):
     
     word = count_vectorizer.get_feature_names()[word_idx]
     marginal_effects[word] = me.round(3)
-
-
-# In[27]:
-
 
 sorted(marginal_effects.items(), key=lambda t: t[1], reverse=True)
 

@@ -38,16 +38,12 @@ warnings.filterwarnings('ignore')
 
 # ## Collecting data from the NT Times with JSON
 
-# In[ ]:
-
 
 #You can get your NYTimes developer key here: https://developer.nytimes.com
 key = 'your_key'
 
 
 # ### Single query
-
-# In[ ]:
 
 
 #Sending query to the NYT Archive API
@@ -56,15 +52,11 @@ request = requests.get(url)
 json_df = request.json()
 
 
-# In[ ]:
-
 
 #Saving JSON file
 with open("json_df.json", "w") as write_file:
     json.dump(json_df, write_file)
 
-
-# In[ ]:
 
 
 #Displaying the number of NYT articles per query=month
@@ -72,28 +64,18 @@ numb = pyjq.all('.response .docs | length', json_df)[0]
 print(numb)
 
 
-# In[ ]:
-
 
 # Extracting information we are interested in (variables)
 jq_query = f'.response .docs [] | {{n_url: .web_url, snippet: .snippet, paragraph: .lead_paragraph, mult: .multimedia[] | .url, headline: .headline .main, keyword: .keywords, date: .pub_date, doc_type: .document_type, news_desk: .news_desk, section: .section_name, subsectoin: .subsectoinName, author: .byline .original, id: ._id, word_count: .word_count}}'
-
-
-# In[ ]:
 
 
 # Returning a dictionary with requested data
 result = pyjq.all(jq_query, json_df)
 
 
-# In[ ]:
-
-
 # Result (dict) to dataframe
 result_df = pd.DataFrame(result)
 
-
-# In[ ]:
 
 
 #Working with dates
@@ -105,7 +87,6 @@ result_df['day'] = result_df['date'].dt.day
 
 # ### Loop for collecting data in a specified time interval
 
-# In[ ]:
 
 
 #Creating a list of (year,month,day)
@@ -120,7 +101,7 @@ end = datetime.date(2020,4,1)
 dates = [(dt.year, dt.month) for dt in rrule(MONTHLY, dtstart=start, until=end)]
 
 
-# In[ ]:
+
 
 
 #Creating empty dataframe with particular columns of interest
@@ -149,15 +130,13 @@ for year, month in tqdm(dates):
     df = df.append(g,  sort=False)
 
 
-# In[ ]:
+
 
 
 df.to_csv('your_data_file.csv', index=False)
 
 
 # ### Web scrapping full texts of articles from NYT
-
-# In[9]:
 
 
 df = pd.read_csv('your_data_path.csv') 
@@ -195,21 +174,17 @@ def get_full_text(df):
     return df
 
 
-# In[ ]:
+
 
 
 #Run the function
 get_full_text(df)
 
 
-# In[13]:
-
 
 #look at one observation
 df.at[0, 'full_text']
 
-
-# In[150]:
 
 
 #Save the data

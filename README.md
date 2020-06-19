@@ -11,5 +11,3 @@ The code for collecting the raw data from the New York Times Developer Network, 
 The code for dealing with Microsoft Azure which provides the artificial intelligence service that identifies faces in images and, for each face, detects attributes such as gender. This method has several limitations: image resolution, size and angle of faces.
 * text_analysis.py\
 The code for dealing with high-dimensional data (digital texts), causal inference and descriptive analysis. First, it includes the code for text preprocessing (tokenization, lemmatization, etc.). Second, it creates a bag-of-words and estimates lasso logistic regression to solve the classification and prediction problems.
-* gender_stereotypes.pdf\
-Thesis paper which is organized as follows. Section 2 presents the existing literature on media, gender stereotypes, and methods of dealing with high-dimensional data. Section 3 describes the data collection process, dataset, and features of variables. Section 4 presents the empirical methods and discusses the findings. Section 5 briefly concludes. 

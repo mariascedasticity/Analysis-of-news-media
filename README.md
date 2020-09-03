@@ -1,4 +1,4 @@
-# Analysis-of-news-media
+# Analysis of News Media
 This is the repository with the code for my own research project. I applied machine learning (ML) and natural language processing (NLP) data to analyse gendered language in news media articles and reveal implicit gendered language. I embedded facial recognition algorithm to automatically analyze >100,000 images and detect attributes such as gender and race. But the whole media-journay started with data collection using APIs and BeautifulSoup (Python).
 
 ## Abstract
